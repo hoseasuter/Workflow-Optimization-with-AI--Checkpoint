@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Pricing Card Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div id="pricing-container" class="w-full max-w-sm sm:max-w-md"></div>
+
+    <script>
+      // Reusable Pricing Card Component Function
+      function createPricingCard({
+        title,
+        price,
+        features,
+        buttonText = "Start Trial",
+        onButtonClick,
+      }) {
+        // Create the main card container
+        const card = document.createElement("div");
+        card.className =
+          "bg-white rounded-xl shadow-lg p-6 sm:p-8 flex flex-col justify-between text-left transition-transform hover:-translate-y-1 duration-300";
+
+        const headerHtml = `
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">${title}</h2>
+                    <p class="text-xl font-semibold text-emerald-600 mb-6">${price}</p>
+                </div>
+            `;
+
+        const featuresList = features
+          .map(
+            (feature) => `
+                <li class="py-3 border-b border-gray-100 text-gray-600 text-sm sm:text-base flex items-center">
+                    <span class="text-emerald-500 mr-2">✓</span> ${feature}
+                </li>
+            `,
+          )
+          .join("");
+
+        const featuresHtml = `
+                <ul class="features list-none p-0 mb-6">
+                    ${featuresList}
+                </ul>
+            `;
+
+        const buttonHtml = `
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    ${buttonText}
+                </button>
+            `;
+
+        card.innerHTML = headerHtml + featuresHtml + buttonHtml;
+
+        const btn = card.querySelector("button");
+        if (onButtonClick) {
+          btn.addEventListener("click", onButtonClick);
+        }
+
+        return card;
+      }
+      const pricingData = {
+        title: "Basic Plan",
+        price: "$9.99 /month",
+        features: ["1 GB Storage", "Basic Support", "All Core Features"],
+        buttonText: "Start Trial",
+        onButtonClick: () => {
+          alert("Trial started for Basic Plan!");
+        },
+      };
+      const container = document.getElementById("pricing-container");
+      container.appendChild(createPricingCard(pricingData));
+    </script>
+  </body>
+</html>
